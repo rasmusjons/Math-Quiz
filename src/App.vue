@@ -1,15 +1,23 @@
 <template>
     <div>
-        <h1>The Super Quiz</h1>
-        <h3 v-if="counter === 10">Congratz</h3>
+        <h1>Math Quiz</h1>
         <hr />
+        <!-- <app-gif></app-gif> -->
         <div class="mainContainer">
-            <appCorrect v-if="display" class="correct" @newQuestion="displayNewQuestion"></appCorrect>
-            <transition name="flip">
+            <transition name="flip" mode="out-in">
+                <appCorrect
+                    v-if="display"
+                    class="correct"
+                    @newQuestion="displayNewQuestion"
+                ></appCorrect>
                 <div v-if="!display">
-                    <app-question class="question" :numberA="numberA" :numberB="numberB"></app-question>
+                    <app-question
+                        :sign="sign"
+                        :numberA="numberA"
+                        :numberB="numberB"
+                    ></app-question>
                     <app-answer
-                        class="answer"
+                        v-if="!display"
                         :answers="answers"
                         :numberA="numberA"
                         :numberB="numberB"
@@ -26,99 +34,130 @@
 </template>
 
 <script>
-import Question from "./components/Question.vue";
-import Answer from "./components/Answer.vue";
-import Correct from "./components/Correct.vue";
-import Progressbar from "./components/Progressbar.vue";
+    import Question from './components/Question.vue';
+    import Answer from './components/Answer.vue';
+    import Correct from './components/Correct.vue';
+    import Progressbar from './components/Progressbar.vue';
+    import GifApi from './components/GifApi.vue';
 
-export default {
-    data() {
-        return {
-            numberA: "",
-            numberB: "",
-            answers: [],
-            display: false,
-            counter: 0,
-            pointsTaken: false
-        };
-    },
-    mounted() {
-        this.createNumbers();
-    },
-    methods: {
-        createNumbers() {
-            let randomAnswerPosition = Math.floor(Math.random() * 4);
-            this.numberA = Math.floor(Math.random() * 50);
-            this.numberB = Math.floor(Math.random() * 50);
-            let result = this.numberA + this.numberB;
-            this.answers.splice(0, 0, result);
-
-            for (let i = 0; i < 3; i++) {
-                let numberC = result + Math.floor(Math.random() * 10);
-                if (!this.answers.includes(numberC)) {
-                    this.answers.splice(randomAnswerPosition, 0, numberC);
-                } else i--;
-            }
+    export default {
+        data() {
+            return {
+                numberA: '',
+                numberB: '',
+                sign: '+',
+                result: '',
+                answers: [],
+                display: false,
+                counter: 0,
+                pointsTaken: false,
+            };
         },
-        displayCorrect(index) {
-            let value = this.answers[index];
-            let answer = this.numberA + this.numberB;
-            if (answer != value) {
-                alert("wrong ey!");
-                this.counter = 0;
-            } else {
-                this.pointsTaken = true;
-                this.counter++;
-                this.display = true;
-            }
-        },
-        displayNewQuestion(hej) {
-            this.answers = [];
+        mounted() {
             this.createNumbers();
-            this.display = false;
-        }
-    },
-    components: {
-        appQuestion: Question,
-        appAnswer: Answer,
-        appCorrect: Correct,
-        appProgressbar: Progressbar
-    }
-};
+        },
+        methods: {
+            createNumbers() {
+                this.numberA = Math.floor(Math.random() * 50);
+                this.numberB = Math.floor(Math.random() * 50);
+
+                if (this.numberA >= 25) {
+                    this.result = this.numberA - this.numberB;
+                    this.sign = '-';
+                    this.answers.splice(0, 0, this.result);
+                } else {
+                    this.result = this.numberA + this.numberB;
+                    this.sign = '+';
+                    this.answers.splice(0, 0, this.result);
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    let numberC = this.result + Math.floor(Math.random() * 10);
+                    let randomAnswerPosition = Math.floor(Math.random() * 4);
+
+                    if (!this.answers.includes(numberC)) {
+                        this.answers.splice(randomAnswerPosition, 0, numberC);
+                        console.log(this.answers);
+                    } else i--;
+                }
+            },
+            displayCorrect(index) {
+                let value = this.answers[index];
+                if (this.result != value) {
+                    alert('wrong ey!');
+                    this.counter = 0;
+                } else {
+                    this.pointsTaken = true;
+                    this.counter++;
+                    this.display = true;
+                }
+            },
+            displayNewQuestion(hej) {
+                this.answers = [];
+                this.createNumbers();
+                this.display = false;
+            },
+            button() {
+                this.display = !this.display;
+            },
+        },
+        components: {
+            appQuestion: Question,
+            appAnswer: Answer,
+            appCorrect: Correct,
+            appProgressbar: Progressbar,
+            appGif: GifApi,
+        },
+    };
 </script>
 
 <style scoped>
-.mainContainer {
-    border: solid 1px lightgrey;
-    width: 600px;
-    margin: auto;
-    height: 200px;
-}
+    .mainContainer {
+        border: solid 1px lightgrey;
+        width: 600px;
+        margin: auto;
+        height: 200px;
+    }
 
-h1 {
-    margin: auto;
-    margin-top: 20px;
-    text-align: center;
-    padding: 30px;
-}
+    h1 {
+        margin: auto;
+        margin-top: 20px;
+        text-align: center;
+        padding: 30px;
+    }
 
-.flip-enter {
-    transition: rotateY(0deg);
-}
-.flip-enter-active {
-    transition: rotateY(180deg);
-}
-.flip-leave {
-}
-.flip-leave-active {
-    transition: opacity 1s;
-    opacity: 0;
-}
+    /*FUNGERAR ---> */
+    /* .flip-enter {
+        opacity: 0;
+    }
+    .fade-leave {
+        opacity: 0;
+    }
 
-.progressbar {
-    border: solid 1px green;
-    width: 100%;
-    height: 40px;
-}
+    .flip-enter-active {
+        transition: opacity 1s;
+    }
+    .flip-leave-active {
+        transition: opacity 1s;
+    } */
+
+    .flip-enter {
+        transform: rotateY(180deg);
+    }
+    .fade-leave {
+        transform: rotateY(180deg);
+    }
+
+    .flip-enter-active {
+        transition: transform 0.5s;
+    }
+    .flip-leave-active {
+        transition: transform 0.5s;
+    }
+
+    .progressbar {
+        border: solid 1px green;
+        width: 100%;
+        height: 40px;
+    }
 </style>
-
