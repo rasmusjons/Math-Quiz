@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1>Math Quiz</h1>
-        <h3 v-if="counter === 10">Congratz</h3>
         <hr />
+        <!-- <app-gif></app-gif> -->
         <div class="mainContainer">
             <transition name="flip" mode="out-in">
                 <appCorrect
@@ -38,6 +38,7 @@
     import Answer from './components/Answer.vue';
     import Correct from './components/Correct.vue';
     import Progressbar from './components/Progressbar.vue';
+    import GifApi from './components/GifApi.vue';
 
     export default {
         data() {
@@ -105,6 +106,7 @@
             appAnswer: Answer,
             appCorrect: Correct,
             appProgressbar: Progressbar,
+            appGif: GifApi,
         },
     };
 </script>

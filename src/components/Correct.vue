@@ -12,8 +12,7 @@
     export default {
         methods: {
             newQuestion() {
-                console.log('newQ');
-                this.$emit('newQuestion', 'hej');
+                this.$emit('newQuestion');
             },
         },
     };
