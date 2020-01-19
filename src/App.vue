@@ -128,31 +128,63 @@
 
     /*FUNGERAR ---> */
     /* .flip-enter {
-        opacity: 0;
-    }
-    .fade-leave {
-        opacity: 0;
-    }
+            opacity: 0;
+        }
+        .fade-leave {
+            opacity: 0;
+        }
 
-    .flip-enter-active {
-        transition: opacity 1s;
-    }
-    .flip-leave-active {
-        transition: opacity 1s;
-    } */
+        .flip-enter-active {
+            transition: opacity 1s;
+        }
+        .flip-leave-active {
+            transition: opacity 1s;
+        } */
+
+    /* .flip-enter {
+            transform: rotateY(180deg);
+        }
+        .fade-leave {
+            transform: rotateY(180deg);
+        }
+
+        .flip-enter-active {
+            transition: transform 0.5s;
+        }
+        .flip-leave-active {
+            transition: transform 0.5s;
+        } */
 
     .flip-enter {
-        transform: rotateY(180deg);
+        /* transform: rotateY(0deg); */
     }
     .fade-leave {
-        transform: rotateY(180deg);
+        /* transform: rotateY(0deg); */
     }
 
     .flip-enter-active {
-        transition: transform 0.5s;
+        animation: flip-in 0.5s ease-out forwards;
     }
     .flip-leave-active {
-        transition: transform 0.5s;
+        animation: flip-out 0.5s ease-out forwards;
+    }
+
+    @keyframes flip-out {
+        from {
+            transform: rotateY(0deg);
+        }
+        to {
+            transform: rotateY(90deg);
+        }
+    }
+
+    @keyframes flip-in {
+        from {
+            transform: rotateY(90deg);
+        }
+        to {
+            transform: rotateY(0deg);
+        }
     }
 
     .progressbar {
